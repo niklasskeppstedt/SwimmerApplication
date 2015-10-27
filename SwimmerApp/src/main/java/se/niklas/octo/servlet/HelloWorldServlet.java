@@ -18,8 +18,11 @@ public class HelloWorldServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)  
             throws ServletException, IOException {
+//    	String attribute = (String) req.getParameter(name)getAttribute("action");
+    	String firstName = (String) req.getParameter("firstname");
+    	String secondName = (String) req.getParameter("secondname");
     	SwimmerApplication swimmApp = new SwimmerApplication();
-    	List<Swimmer> searchSwimmer = swimmApp.searchSwimmer("Elias", "Skeppstedt");
+    	List<Swimmer> searchSwimmer = swimmApp.searchSwimmer(firstName, secondName);
     	StringBuilder builder = new StringBuilder();
     	for (Swimmer swimmer : searchSwimmer) {
     		swimmApp.loadSwimmerFromOctoWeb(swimmer);
