@@ -2,6 +2,8 @@ package se.niklas.octo.domain;
 
 import java.time.Duration;
 
+import se.niklas.octo.format.FormatHelper;
+
 public class PersonalBest {
 	private Event event;
 	private Duration time;
@@ -30,5 +32,9 @@ public class PersonalBest {
 	public String getCompetition() {
 		return competition;
 	}
-
+	
+	@Override
+	public String toString() {
+		return String.format("%15s %-10s", event, FormatHelper.formatDuration(time));
+	}
 }

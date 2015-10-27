@@ -27,12 +27,22 @@ public class SwimmerApplication {
 		SwimmerApplication swimmApp = new SwimmerApplication();
 		String[] swimmerIds = new String[] {ELIAS,OTTO_L,OTTO_R,FILIP,WALTER};
 		swimmApp.load(swimmerIds);
+		
+		System.out.println("==== Get the top 5 Medley Teams =========");
+		List<MedleyTeam> medleyTeams = swimmApp.getAllMedleyTeams();
+		for (int i = 0; i < 5; i++) {
+			System.out.println(medleyTeams.get(i));;
+		}
+		
+		System.out.println("==== Get the bottom 5 Medley Teams =========");
+		medleyTeams = swimmApp.getAllMedleyTeams();
+		for (int i = medleyTeams.size() -1; i > medleyTeams.size() -6; i--) {
+			System.out.println(medleyTeams.get(i));;
+		}
+		
+		System.out.println("==== Get the best Medley Team =========");
 		MedleyTeam medleyTeam = swimmApp.getBestMedleyTeam();
-		System.out.println("Best medleyteam has a time of " + medleyTeam.getTime() + " and consists of:");
-		System.out.println(medleyTeam.getBackstroke().getSwimmer().getName());
-		System.out.println(medleyTeam.getButterfly().getSwimmer().getName());
-		System.out.println(medleyTeam.getBreaststroke().getSwimmer().getName());
-		System.out.println(medleyTeam.getFreestyle().getSwimmer().getName());
+		System.out.println(medleyTeam);
 	}
 
 	private void load(String[] swimmerIds) {
@@ -65,12 +75,11 @@ public class SwimmerApplication {
 	}
 	
 	public MedleyTeam getBestMedleyTeam() {
-		List<MedleyTeam> medleyTeams = getPossibleMedleyTeams();
-		medleyTeams.sort(new MedleyTeamComparator());
+		List<MedleyTeam> medleyTeams = getAllMedleyTeams();
 		return medleyTeams.get(0);
 	}
 
-	private List<MedleyTeam> getPossibleMedleyTeams() {
+	public List<MedleyTeam> getAllMedleyTeams() {
 		List<PersonalBest> backstroke = getBestTimesForEvent(Event.BACKSTROKE_50);
 		List<PersonalBest> butterfly = getBestTimesForEvent(Event.BUTTERFLY_50);
 		List<PersonalBest> breaststroke = getBestTimesForEvent(Event.BREASTSTROKE_50);
@@ -88,6 +97,7 @@ public class SwimmerApplication {
 				}
 			}
 		}
+		allTeams.sort(new MedleyTeamComparator());
 		return allTeams;
 	}
 

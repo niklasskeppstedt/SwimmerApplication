@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Swimmer {
-	String name;
-	String yearOfBirth;
-	List<PersonalBest> personalBests;
+	private String name;
+	private String yearOfBirth;
+	private List<PersonalBest> personalBests;
 	
 	public Swimmer(String name, String yearOfBirth) {
 		this.name = name;

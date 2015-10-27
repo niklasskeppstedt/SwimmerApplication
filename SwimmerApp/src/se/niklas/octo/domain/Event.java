@@ -79,6 +79,6 @@ public enum Event {
 	
 	@Override
 	public String toString() {
-		return String.format("%-5s%-10s", distance, discipline);
+		return String.format("%4s %-10s", distance, discipline);
 	}
 }
