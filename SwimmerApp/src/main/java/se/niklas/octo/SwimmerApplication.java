@@ -72,7 +72,6 @@ public class SwimmerApplication {
 		System.out.println("==== Get the best Medley Team regarding who is available=========");
 		@SuppressWarnings("unchecked")
 		List<Swimmer> availableSwimmers = swimmApp.getSwimmerByPredicate(PredicateBuilder.createSwimmerOctoIdIsAvailabelPredicate(Arrays.asList(swimmerIds)));
-		@SuppressWarnings("unchecked")
 		MedleyTeam medleyTeam = swimmApp.getBestMedleyTeam(PredicateBuilder.createSwimmerIsAvailabelPredicate(availableSwimmers));
 		System.out.println(medleyTeam);
 
