@@ -3,6 +3,11 @@ package se.niklas.octo.parse;
 import java.io.IOException;
 import java.net.URL;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,26 +22,50 @@ import se.niklas.octo.domain.Swimmer;
 
 public class OctoParser {
 
-	private String swimmerUrl;
+	private String url;
 	private Document document;
 
 	public OctoParser(String swimmerUrl) {
-		this.swimmerUrl = swimmerUrl;
+		this.url = swimmerUrl;
 	}
 
-	public Swimmer parse(String octoId) {
+	public Swimmer parseSwimmer(String octoId) {
 		Swimmer swimmer = null;
 		try {
-			document = Jsoup.parse(new URL(swimmerUrl + octoId), 3000);
+			document = Jsoup.parse(new URL(url + octoId), 3000);
 		} catch (IOException e) {
 			System.err.println("Could not parse swimmer url");
 		}
 		String name = extractSwimmerName();
 		String dateOfBirth = extractSwimmerYearOfBirth();
-		swimmer = new Swimmer(name, dateOfBirth);
+		String swimmingClub = extractSwimmerClub();
+		swimmer = new Swimmer(name, dateOfBirth, octoId, swimmingClub);
 		extractPersonalBests(swimmer);
 		
 		return swimmer;
+	}
+	
+	public Set<Swimmer> parseSearchResult() {
+		try {
+			document = Jsoup.parse(new URL(url), 3000);
+		} catch (IOException e) {
+			System.err.println("Could not parse swimmer url");
+		}
+		Set<Swimmer> swimmers = new HashSet<>();
+		Elements odd = document.select("tr.odd");
+		odd.addAll(document.select("tr.even"));
+		for (Element element : odd) {
+			String firstName = element.select("td.name-column").first().ownText();
+			String lastName = element.select("td").get(1).ownText();
+			String yearOfBirth = element.select("td").get(3).ownText();
+			String swimmingClub = element.select("td").get(4).ownText();
+			String octoId = extractLinkParameter(element, "id");
+			boolean added = swimmers.add(new Swimmer(firstName + " " + lastName, yearOfBirth, octoId, swimmingClub));
+			if(!added) {
+				System.err.println("Could not add swimmer, already in set");
+			}
+		}
+		return swimmers;
 	}
 
 	private void extractPersonalBests(Swimmer swimmer) {
@@ -47,14 +76,14 @@ public class OctoParser {
 			String competition = extractCompetition(element);
 			String date = extractDate(element);
 			Duration time = extractTime(element);
-			Event event = extractEvent(element);
+			Event event = Event.fromCode(extractLinkParameter(element, "event"));
 			swimmer.addPersonalBest(new PersonalBest(event, time, competition, swimmer));
 		}
 	}
 
-	private Event extractEvent(Element element) {
-		String[] link = element.select("a").attr("href").split("event=");
-		return Event.fromCode(link[1]);
+	private String extractLinkParameter(Element element, String parameterName) {
+		String[] link = element.select("a").attr("href").split(parameterName +"=");
+		return link[1];
 	}
 
 	private Duration extractTime(Element element) {
@@ -79,6 +108,14 @@ public class OctoParser {
 		return dateOfBirth;
 	}
 
+	private String extractSwimmerClub() {
+		String clubConst = "Förening:";
+		String swimmingClub = document.getElementsContainingOwnText(clubConst).text();
+//		Född: 2003 Förening: Stockholms Kappsimningsklubb Licens: AG3903
+		swimmingClub = swimmingClub.substring(swimmingClub.indexOf(clubConst) + clubConst.length(), swimmingClub.indexOf("Licens")).trim();
+		return swimmingClub;
+	}
+
 	private String extractFromTextWithPattern(String text, String regex) {
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(text);
@@ -94,4 +131,5 @@ public class OctoParser {
 		name = document.select("h2").text();
 		return name;
 	}
+
 }

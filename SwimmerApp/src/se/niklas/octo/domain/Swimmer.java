@@ -2,18 +2,33 @@ package se.niklas.octo.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+
+import se.niklas.octo.format.FormatHelper;
 
 public class Swimmer {
 	private String name;
 	private String yearOfBirth;
 	private List<PersonalBest> personalBests;
-	
-	public Swimmer(String name, String yearOfBirth) {
+	private String octoId;
+	private String swimmingClub;
+
+	public Swimmer(String name, String yearOfBirth, String octoId, String swimmingClub) {
 		this.name = name;
 		this.yearOfBirth = yearOfBirth;
-		personalBests = new ArrayList<>();
+		this.octoId = octoId;
+		this.swimmingClub = swimmingClub;
+		this.personalBests = new ArrayList<>();
 	}
 	
+	public String getOctoId() {
+		return octoId;
+	}
+	
+	public String getSwimmingClub() {
+		return swimmingClub;
+	};
+
 	public String getName() {
 		return name;
 	}
@@ -37,6 +52,22 @@ public class Swimmer {
 			}
 		}
 		return null;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(super.equals(obj)) {
+			return true; //Same object
+		}
+		if(obj == null || !(obj instanceof Swimmer)) {
+			return false;
+		}
+		return this.octoId.equals(((Swimmer)obj).getOctoId());
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("%-20s %-4s %-20s", name, yearOfBirth, swimmingClub);
 	}
 
 }
