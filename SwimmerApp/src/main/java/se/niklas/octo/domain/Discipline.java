@@ -1,9 +1,9 @@
 package se.niklas.octo.domain;
 
 public enum Discipline {
-	BREASTSTROKE("Bröstsim"),
+	BREASTSTROKE("BrÃ¶stsim"),
 	BACKSTROKE("Ryggsim"),
-	BUTTERFLY("Fjärilssim"),
+	BUTTERFLY("FjÃ¤rilssim"),
 	FREESTYLE("Frisim"), 
 	MEDLEY("Medley");
 	

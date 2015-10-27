@@ -21,6 +21,7 @@ import se.niklas.octo.sort.MedleyTeamComparator;
 import se.niklas.octo.sort.PersonalBestComparator;
 
 public class SwimmerApplication {
+    
 	
 	private static String swimmerResultUrl = "http://www.octoopen.se/index.php?r=swimmer/view&id=";
 	private static String swimmerSearchUrl = "http://www.octoopen.se/index.php?r=swimmer/index&Swimmer[first_name]=afirstname&Swimmer[last_name]=alastname";
@@ -36,8 +37,8 @@ public class SwimmerApplication {
 	public static void main(String[] args) {
 		SwimmerApplication swimmApp = new SwimmerApplication();
 		
-		System.out.println("==== Search for swimmer with name David Kågström =========");
-		List<Swimmer> swimmersResult = swimmApp.searchSwimmer("David", "Kågström");
+		System.out.println("==== Search for swimmer with name David KÃ¥gstrÃ¶m =========");
+		List<Swimmer> swimmersResult = swimmApp.searchSwimmer("David", "KÃ¥gstrÃ¶m");
 		for (Swimmer swimmer : swimmersResult) {
 			System.out.println(swimmer);
 		}

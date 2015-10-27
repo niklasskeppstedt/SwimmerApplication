@@ -103,15 +103,15 @@ public class OctoParser {
 
 	private String extractSwimmerYearOfBirth() {
 		String dateOfBirth = null;
-		String bornText = document.getElementsContainingOwnText("Född").text();
+		String bornText = document.getElementsContainingOwnText("FÃ¶dd").text();
 		dateOfBirth = extractFromTextWithPattern(bornText, "\\d{4}");
 		return dateOfBirth;
 	}
 
 	private String extractSwimmerClub() {
-		String clubConst = "Förening:";
+		String clubConst = "FÃ¶rening:";
 		String swimmingClub = document.getElementsContainingOwnText(clubConst).text();
-//		Född: 2003 Förening: Stockholms Kappsimningsklubb Licens: AG3903
+//		Fï¿½dd: 2003 Fï¿½rening: Stockholms Kappsimningsklubb Licens: AG3903
 		swimmingClub = swimmingClub.substring(swimmingClub.indexOf(clubConst) + clubConst.length(), swimmingClub.indexOf("Licens")).trim();
 		return swimmingClub;
 	}
